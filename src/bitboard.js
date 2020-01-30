@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * Chess.Bitboard is an unsigned 64 bit integer, each bit representing a boolean value on the corresponding chessboard square.
@@ -10,17 +10,17 @@
  * TODO: test using three numbers here instead of two: 31 bit integers are faster than 32 bit ones in chrome (https://v8-io12.appspot.com/#35)
  */
 Chess.Bitboard = function(low, high) {
-	/**
-	 * Lower 32 bits of the 64 bit value
-	 * @type {number}
-	 */
-	this.low = low >>> 0;
+  /**
+   * Lower 32 bits of the 64 bit value
+   * @type {number}
+   */
+  this.low = low >>> 0;
 
-	/**
-	 * Upper 32 bits of the 64 bit value
-	 * @type {number}
-	 */
-	this.high = high >>> 0;
+  /**
+   * Upper 32 bits of the 64 bit value
+   * @type {number}
+   */
+  this.high = high >>> 0;
 };
 
 /**
@@ -30,19 +30,19 @@ Chess.Bitboard = function(low, high) {
  * @return {number} 0-32 number of bits set in v
  */
 Chess.Bitboard.popcnt32 = function(v) {
-	v >>>= 0;
-	v -= (v >>> 1) & 0x55555555;
-	v = (v & 0x33333333) + ((v >>> 2) & 0x33333333);
-	return ((v + (v >>> 4) & 0xF0F0F0F) * 0x1010101) >>> 24;
+  v >>>= 0;
+  v -= (v >>> 1) & 0x55555555;
+  v = (v & 0x33333333) + ((v >>> 2) & 0x33333333);
+  return (((v + (v >>> 4)) & 0xf0f0f0f) * 0x1010101) >>> 24;
 };
 
 /**
  * @param {number} v 32 bit integer
  * @return {number} v with its lowest bit cleared
  */
-Chess.Bitboard.popLowestBit32 = function (v) {
-	v >>>= 0;
-	return (v & (v - 1)) >>> 0;
+Chess.Bitboard.popLowestBit32 = function(v) {
+  v >>>= 0;
+  return (v & (v - 1)) >>> 0;
 };
 
 /**
@@ -50,13 +50,13 @@ Chess.Bitboard.popLowestBit32 = function (v) {
  * @return {number} 0-31 Position of first set bit
  */
 Chess.Bitboard.getLowestBitPosition32 = function(v) {
-	v >>>= 0;
-	return Chess.Bitboard.popcnt32((v & -v) - 1);
+  v >>>= 0;
+  return Chess.Bitboard.popcnt32((v & -v) - 1);
 };
 
 /** @return {number} 0-64 number of bits set in this Chess.Bitboard */
 Chess.Bitboard.prototype.popcnt = function() {
-	return Chess.Bitboard.popcnt32(this.low) + Chess.Bitboard.popcnt32(this.high);
+  return Chess.Bitboard.popcnt32(this.low) + Chess.Bitboard.popcnt32(this.high);
 };
 
 /**
@@ -64,22 +64,22 @@ Chess.Bitboard.prototype.popcnt = function() {
  * @return {!Chess.Bitboard} this with the lowest bit cleared
  */
 Chess.Bitboard.prototype.popLowestBit = function() {
-	if (this.low) {
-		this.low = Chess.Bitboard.popLowestBit32(this.low);
-	} else {
-		this.high = Chess.Bitboard.popLowestBit32(this.high);
-	}
+  if (this.low) {
+    this.low = Chess.Bitboard.popLowestBit32(this.low);
+  } else {
+    this.high = Chess.Bitboard.popLowestBit32(this.high);
+  }
 
-	return this;
+  return this;
 };
 
 /** @return {number} 0-63 position of the first set bit. Undefined behavior if this Chess.Bitboard is empty. */
 Chess.Bitboard.prototype.getLowestBitPosition = function() {
-	if (this.low) {
-		return Chess.Bitboard.getLowestBitPosition32(this.low);
-	}
+  if (this.low) {
+    return Chess.Bitboard.getLowestBitPosition32(this.low);
+  }
 
-	return 32 + Chess.Bitboard.getLowestBitPosition32(this.high);
+  return 32 + Chess.Bitboard.getLowestBitPosition32(this.high);
 };
 
 /**
@@ -87,14 +87,14 @@ Chess.Bitboard.prototype.getLowestBitPosition = function() {
  * @return {number} 0-63 position of the first set bit. Undefined behavior if this Chess.Bitboard is empty.
  */
 Chess.Bitboard.prototype.extractLowestBitPosition = function() {
-	var index = this.getLowestBitPosition();
-	this.popLowestBit();
-	return index;
+  let index = this.getLowestBitPosition();
+  this.popLowestBit();
+  return index;
 };
 
 /** @return {boolean} true if all the bits in this Chess.Bitboard are zero */
 Chess.Bitboard.prototype.isEmpty = function() {
-	return !this.low && !this.high;
+  return !this.low && !this.high;
 };
 
 /**
@@ -102,13 +102,13 @@ Chess.Bitboard.prototype.isEmpty = function() {
  * @return {boolean} true if the bit at index is 0
  */
 Chess.Bitboard.prototype.isClear = function(index) {
-	index >>>= 0;
+  index >>>= 0;
 
-	if (index < 32) {
-		return !(this.low & (1 << index));
-	}
+  if (index < 32) {
+    return !(this.low & (1 << index));
+  }
 
-	return !(this.high & (1 << (index - 32)));
+  return !(this.high & (1 << (index - 32)));
 };
 
 /**
@@ -116,7 +116,7 @@ Chess.Bitboard.prototype.isClear = function(index) {
  * @return {boolean} true if the bit at index is 1
  */
 Chess.Bitboard.prototype.isSet = function(index) {
-	return !this.isClear(index);
+  return !this.isClear(index);
 };
 
 /**
@@ -124,15 +124,15 @@ Chess.Bitboard.prototype.isSet = function(index) {
  * @return {!Chess.Bitboard} this or 1 << index
  */
 Chess.Bitboard.prototype.setBit = function(index) {
-	index >>>= 0;
+  index >>>= 0;
 
-	if (index < 32) {
-		this.low = (this.low | (1 << index)) >>> 0;
-	} else {
-		this.high = (this.high | (1 << (index - 32))) >>> 0;
-	}
+  if (index < 32) {
+    this.low = (this.low | (1 << index)) >>> 0;
+  } else {
+    this.high = (this.high | (1 << (index - 32))) >>> 0;
+  }
 
-	return this;
+  return this;
 };
 
 /**
@@ -140,15 +140,15 @@ Chess.Bitboard.prototype.setBit = function(index) {
  * @return {!Chess.Bitboard} this and not 1 << index
  */
 Chess.Bitboard.prototype.clearBit = function(index) {
-	index >>>= 0;
+  index >>>= 0;
 
-	if (index < 32) {
-		this.low = (this.low & ~(1 << index)) >>> 0;
-	} else {
-		this.high = (this.high & ~(1 << (index - 32))) >>> 0;
-	}
+  if (index < 32) {
+    this.low = (this.low & ~(1 << index)) >>> 0;
+  } else {
+    this.high = (this.high & ~(1 << (index - 32))) >>> 0;
+  }
 
-	return this;
+  return this;
 };
 
 /**
@@ -156,10 +156,10 @@ Chess.Bitboard.prototype.clearBit = function(index) {
  * @return {!Chess.Bitboard} this and other
  */
 Chess.Bitboard.prototype.and = function(other) {
-	this.low = (this.low & other.low) >>> 0;
-	this.high = (this.high & other.high) >>> 0;
+  this.low = (this.low & other.low) >>> 0;
+  this.high = (this.high & other.high) >>> 0;
 
-	return this;
+  return this;
 };
 
 /**
@@ -167,10 +167,10 @@ Chess.Bitboard.prototype.and = function(other) {
  * @return {!Chess.Bitboard} this and not other
  */
 Chess.Bitboard.prototype.and_not = function(other) {
-	this.low = (this.low & ~other.low) >>> 0;
-	this.high = (this.high & ~other.high) >>> 0;
+  this.low = (this.low & ~other.low) >>> 0;
+  this.high = (this.high & ~other.high) >>> 0;
 
-	return this;
+  return this;
 };
 
 /**
@@ -178,10 +178,10 @@ Chess.Bitboard.prototype.and_not = function(other) {
  * @return {!Chess.Bitboard} this or other
  */
 Chess.Bitboard.prototype.or = function(other) {
-	this.low = (this.low | other.low) >>> 0;
-	this.high = (this.high | other.high) >>> 0;
+  this.low = (this.low | other.low) >>> 0;
+  this.high = (this.high | other.high) >>> 0;
 
-	return this;
+  return this;
 };
 
 /**
@@ -189,18 +189,18 @@ Chess.Bitboard.prototype.or = function(other) {
  * @return {!Chess.Bitboard} this xor other
  */
 Chess.Bitboard.prototype.xor = function(other) {
-	this.low = (this.low ^ other.low) >>> 0;
-	this.high = (this.high ^ other.high) >>> 0;
+  this.low = (this.low ^ other.low) >>> 0;
+  this.high = (this.high ^ other.high) >>> 0;
 
-	return this;
+  return this;
 };
 
 /** @return {!Chess.Bitboard} not this */
 Chess.Bitboard.prototype.not = function() {
-	this.low = (~this.low) >>> 0;
-	this.high = (~this.high) >>> 0;
+  this.low = ~this.low >>> 0;
+  this.high = ~this.high >>> 0;
 
-	return this;
+  return this;
 };
 
 /**
@@ -209,17 +209,17 @@ Chess.Bitboard.prototype.not = function() {
  * @return {!Chess.Bitboard} this << v
  */
 Chess.Bitboard.prototype.shl = function(v) {
-	v >>>= 0;
+  v >>>= 0;
 
-	if (v > 31) {
-		this.high = (this.low << (v - 32)) >>> 0;
-		this.low = 0 >>> 0;
-	} else if (v > 0) {
-		this.high = ((this.high << v) | (this.low >>> (32 - v))) >>> 0;
-		this.low = (this.low << v) >>> 0;
-	}
+  if (v > 31) {
+    this.high = (this.low << (v - 32)) >>> 0;
+    this.low = 0 >>> 0;
+  } else if (v > 0) {
+    this.high = ((this.high << v) | (this.low >>> (32 - v))) >>> 0;
+    this.low = (this.low << v) >>> 0;
+  }
 
-	return this;
+  return this;
 };
 
 /**
@@ -228,17 +228,17 @@ Chess.Bitboard.prototype.shl = function(v) {
  * @return {!Chess.Bitboard} this >>> v
  */
 Chess.Bitboard.prototype.shr = function(v) {
-	v >>>= 0;
+  v >>>= 0;
 
-	if (v > 31) {
-		this.low = this.high >>> (v - 32);
-		this.high = 0 >>> 0;
-	} else if (v > 0) {
-		this.low = ((this.low >>> v) | (this.high << (32 - v))) >>> 0;
-		this.high >>>= v;
-	}
+  if (v > 31) {
+    this.low = this.high >>> (v - 32);
+    this.high = 0 >>> 0;
+  } else if (v > 0) {
+    this.low = ((this.low >>> v) | (this.high << (32 - v))) >>> 0;
+    this.high >>>= v;
+  }
 
-	return this;
+  return this;
 };
 
 /**
@@ -247,15 +247,15 @@ Chess.Bitboard.prototype.shr = function(v) {
  * @return {!Chess.Bitboard} this << v
  */
 Chess.Bitboard.prototype.shiftLeft = function(v) {
-	if (v > 63 || v < -63) {
-		this.low = this.high = 0 >>> 0;
-	} else if (v > 0) {
-		this.shl(v);
-	} else if (v < 0) {
-		this.shr(-v);
-	}
+  if (v > 63 || v < -63) {
+    this.low = this.high = 0 >>> 0;
+  } else if (v > 0) {
+    this.shl(v);
+  } else if (v < 0) {
+    this.shr(-v);
+  }
 
-	return this;
+  return this;
 };
 
 /**
@@ -263,12 +263,12 @@ Chess.Bitboard.prototype.shiftLeft = function(v) {
  * @return {boolean} 'this' equals 'other'
  */
 Chess.Bitboard.prototype.isEqual = function(other) {
-	return this.low === other.low && this.high === other.high;
+  return this.low === other.low && this.high === other.high;
 };
 
 /** @return {!Chess.Bitboard} copy of this */
 Chess.Bitboard.prototype.dup = function() {
-	return Chess.Bitboard.make(this.low, this.high);
+  return Chess.Bitboard.make(this.low, this.high);
 };
 
 /**
@@ -277,27 +277,27 @@ Chess.Bitboard.prototype.dup = function() {
  * @return {!Chess.Bitboard}
  */
 Chess.Bitboard.make = function(low, high) {
-	return new Chess.Bitboard(low, high);
+  return new Chess.Bitboard(low, high);
 };
 
 /** @return {!Chess.Bitboard} bitboard of all zeros */
 Chess.Bitboard.makeZero = function() {
-	return Chess.Bitboard.make(0, 0);
+  return Chess.Bitboard.make(0, 0);
 };
 
 /** @return {!Chess.Bitboard} bitboard of all ones */
 Chess.Bitboard.makeOne = function() {
-	return Chess.Bitboard.make(0xFFFFFFFF, 0xFFFFFFFF);
+  return Chess.Bitboard.make(0xffffffff, 0xffffffff);
 };
 
 /** @return {!Chess.Bitboard} bitboard of ones in light (white) squares, zeros in dark (black) squares */
 Chess.Bitboard.makeLightSquares = function() {
-	return Chess.Bitboard.make(0x55AA55AA, 0x55AA55AA);
+  return Chess.Bitboard.make(0x55aa55aa, 0x55aa55aa);
 };
 
 /** @return {!Chess.Bitboard} bitboard of ones in dark squares, zeros in light squares */
 Chess.Bitboard.makeDarkSquares = function() {
-	return Chess.Bitboard.make(0xAA55AA55, 0xAA55AA55);
+  return Chess.Bitboard.make(0xaa55aa55, 0xaa55aa55);
 };
 
 /**
@@ -305,16 +305,16 @@ Chess.Bitboard.makeDarkSquares = function() {
  * @return {!Chess.Bitboard} bitboard of ones in file, zeros elsewhere
  */
 Chess.Bitboard.makeFile = function(file) {
-	return Chess.Bitboard.make(0x01010101, 0x01010101).shl(file);
+  return Chess.Bitboard.make(0x01010101, 0x01010101).shl(file);
 };
 
 /** @return {!Array.<!Chess.Bitboard>} bitboard for each file */
 Chess.Bitboard.makeFiles = function() {
-	var b = [];
-	for (var i = 0; i < 8; ++i) {
-		b.push(Chess.Bitboard.makeFile(i));
-	}
-	return b;
+  let b = [];
+  for (var i = 0; i < 8; ++i) {
+    b.push(Chess.Bitboard.makeFile(i));
+  }
+  return b;
 };
 
 /**
@@ -322,16 +322,16 @@ Chess.Bitboard.makeFiles = function() {
  * @return {!Chess.Bitboard} bitboard of ones in rank, zeros elsewhere
  */
 Chess.Bitboard.makeRank = function(rank) {
-	return Chess.Bitboard.make(0xFF, 0).shl(rank * 8);
+  return Chess.Bitboard.make(0xff, 0).shl(rank * 8);
 };
 
 /** @return {!Array.<!Chess.Bitboard>} bitboard for each rank */
 Chess.Bitboard.makeRanks = function() {
-	var b = [];
-	for (var i = 0; i < 8; ++i) {
-		b.push(Chess.Bitboard.makeRank(i));
-	}
-	return b;
+  let b = [];
+  for (var i = 0; i < 8; ++i) {
+    b.push(Chess.Bitboard.makeRank(i));
+  }
+  return b;
 };
 
 /**
@@ -339,16 +339,16 @@ Chess.Bitboard.makeRanks = function() {
  * @return {!Chess.Bitboard} bitboard of 1 at index, zero elsewhere
  */
 Chess.Bitboard.makeIndex = function(index) {
-	return Chess.Bitboard.makeZero().setBit(index);
+  return Chess.Bitboard.makeZero().setBit(index);
 };
 
 /** @return {!Array.<!Chess.Bitboard>} bitboard for each index */
 Chess.Bitboard.makeIndices = function() {
-	var b = [];
-	for (var i = 0; i < 64; ++i) {
-		b.push(Chess.Bitboard.makeIndex(i));
-	}
-	return b;
+  let b = [];
+  for (var i = 0; i < 64; ++i) {
+    b.push(Chess.Bitboard.makeIndex(i));
+  }
+  return b;
 };
 
 /**
@@ -357,16 +357,18 @@ Chess.Bitboard.makeIndices = function() {
  * @return {!Chess.Bitboard} bitboard with ones on diagonal, zeros elsewhere
  */
 Chess.Bitboard.makeDiagonal = function(diagonal) {
-	return Chess.Bitboard.make(0x10204080, 0x01020408).and(Chess.Bitboard.makeOne().shiftLeft(diagonal * 8)).shiftLeft(diagonal);
+  return Chess.Bitboard.make(0x10204080, 0x01020408)
+    .and(Chess.Bitboard.makeOne().shiftLeft(diagonal * 8))
+    .shiftLeft(diagonal);
 };
 
 /** @return {!Array.<!Chess.Bitboard>} bitboard for each diagonal */
 Chess.Bitboard.makeDiagonals = function() {
-	var b = [];
-	for (var i = -7; i < 8; ++i) {
-		b.push(Chess.Bitboard.makeDiagonal(i));
-	}
-	return b;
+  let b = [];
+  for (var i = -7; i < 8; ++i) {
+    b.push(Chess.Bitboard.makeDiagonal(i));
+  }
+  return b;
 };
 
 /**
@@ -375,16 +377,18 @@ Chess.Bitboard.makeDiagonals = function() {
  * @return {!Chess.Bitboard} bitboard with ones on antidiagonal, zeros elsewhere
  */
 Chess.Bitboard.makeAntidiagonal = function(antidiagonal) {
-	return Chess.Bitboard.make(0x08040201, 0x80402010).and(Chess.Bitboard.makeOne().shiftLeft(-antidiagonal * 8)).shiftLeft(antidiagonal);
+  return Chess.Bitboard.make(0x08040201, 0x80402010)
+    .and(Chess.Bitboard.makeOne().shiftLeft(-antidiagonal * 8))
+    .shiftLeft(antidiagonal);
 };
 
 /** @return {!Array.<!Chess.Bitboard>} bitboard for each antidiagonal */
 Chess.Bitboard.makeAntidiagonals = function() {
-	var b = [];
-	for (var i = -7; i < 8; ++i) {
-		b.push(Chess.Bitboard.makeAntidiagonal(i));
-	}
-	return b;
+  let b = [];
+  for (var i = -7; i < 8; ++i) {
+    b.push(Chess.Bitboard.makeAntidiagonal(i));
+  }
+  return b;
 };
 
 /**
@@ -393,23 +397,42 @@ Chess.Bitboard.makeAntidiagonals = function() {
  * @return {!Chess.Bitboard} knight target squares
  */
 Chess.Bitboard.makeKnightMovement = function(index) {
-	var b = Chess.Bitboard.makeZero().setBit(index);
-	var l1 = b.dup().shr(1).and_not(Chess.Bitboard.FILES[7]);
-	var l2 = b.dup().shr(2).and_not(Chess.Bitboard.FILES[7]).and_not(Chess.Bitboard.FILES[6]);
-	var r1 = b.dup().shl(1).and_not(Chess.Bitboard.FILES[0]);
-	var r2 = b.dup().shl(2).and_not(Chess.Bitboard.FILES[0]).and_not(Chess.Bitboard.FILES[1]);
-	var v1 = l2.or(r2);
-	var v2 = l1.or(r1);
-	return v1.dup().shl(8).or(v1.shr(8)).or(v2.dup().shl(16)).or(v2.shr(16));
+  let b = Chess.Bitboard.makeZero().setBit(index);
+  let l1 = b
+    .dup()
+    .shr(1)
+    .and_not(Chess.Bitboard.FILES[7]);
+  let l2 = b
+    .dup()
+    .shr(2)
+    .and_not(Chess.Bitboard.FILES[7])
+    .and_not(Chess.Bitboard.FILES[6]);
+  let r1 = b
+    .dup()
+    .shl(1)
+    .and_not(Chess.Bitboard.FILES[0]);
+  let r2 = b
+    .dup()
+    .shl(2)
+    .and_not(Chess.Bitboard.FILES[0])
+    .and_not(Chess.Bitboard.FILES[1]);
+  let v1 = l2.or(r2);
+  let v2 = l1.or(r1);
+  return v1
+    .dup()
+    .shl(8)
+    .or(v1.shr(8))
+    .or(v2.dup().shl(16))
+    .or(v2.shr(16));
 };
 
 /** @return {!Array.<!Chess.Bitboard>} bitboard for knight movement from each square */
 Chess.Bitboard.makeKnightMovements = function() {
-	var b = [];
-	for (var i = 0; i < 64; ++i) {
-		b.push(Chess.Bitboard.makeKnightMovement(i));
-	}
-	return b;
+  let b = [];
+  for (var i = 0; i < 64; ++i) {
+    b.push(Chess.Bitboard.makeKnightMovement(i));
+  }
+  return b;
 };
 
 /**
@@ -417,20 +440,35 @@ Chess.Bitboard.makeKnightMovements = function() {
  * @return {!Chess.Bitboard} king target squares
  */
 Chess.Bitboard.makeKingMovement = function(index) {
-	var b = Chess.Bitboard.makeZero().setBit(index);
-	var c = b.dup().shr(1).and_not(Chess.Bitboard.FILES[7]).or(b.dup().shl(1).and_not(Chess.Bitboard.FILES[0]));
-	var u = b.dup().or(c).shr(8);
-	var d = b.dup().or(c).shl(8);
-	return c.or(u).or(d);
+  let b = Chess.Bitboard.makeZero().setBit(index);
+  let c = b
+    .dup()
+    .shr(1)
+    .and_not(Chess.Bitboard.FILES[7])
+    .or(
+      b
+        .dup()
+        .shl(1)
+        .and_not(Chess.Bitboard.FILES[0])
+    );
+  let u = b
+    .dup()
+    .or(c)
+    .shr(8);
+  let d = b
+    .dup()
+    .or(c)
+    .shl(8);
+  return c.or(u).or(d);
 };
 
 /** @return {!Array.<!Chess.Bitboard>} bitboard for king movement from each square */
 Chess.Bitboard.makeKingMovements = function() {
-	var b = [];
-	for (var i = 0; i < 64; ++i) {
-		b.push(Chess.Bitboard.makeKingMovement(i));
-	}
-	return b;
+  let b = [];
+  for (var i = 0; i < 64; ++i) {
+    b.push(Chess.Bitboard.makeKingMovement(i));
+  }
+  return b;
 };
 
 /**
