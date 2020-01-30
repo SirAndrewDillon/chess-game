@@ -22,7 +22,7 @@ Chess.Parser.clean = function(text) {
   ); // normalize dashes
   while (true) {
     // remove comments, i.e. (nested) parentheses and characters between them
-    let replaced = text.replace(/\([^()]*\)/g, '');
+    var replaced = text.replace(/\([^()]*\)/g, '');
     if (replaced === text) {
       break;
     }
@@ -39,11 +39,11 @@ Chess.Parser.clean = function(text) {
  * @return {?Array.<!Chess.Move>}
  */
 Chess.Parser.parseOneMove = function(chessPosition, text) {
-  let legalMoves = chessPosition.getMoves();
+  var legalMoves = chessPosition.getMoves();
 
-  let castling = text.match(/0-0(?:-0)?|O-O(?:-O)?/i);
+  var castling = text.match(/0-0(?:-0)?|O-O(?:-O)?/i);
   if (castling) {
-    let kind =
+    var kind =
       castling[0].length === 3
         ? Chess.Move.Kind.KING_CASTLE
         : Chess.Move.Kind.QUEEN_CASTLE;
@@ -54,17 +54,17 @@ Chess.Parser.parseOneMove = function(chessPosition, text) {
     );
   }
 
-  let move = text.match(
+  var move = text.match(
     /([NBRQK])?([a-h])?([1-8])?-?([x:])?([a-h])([1-8])?(?:[=(]([NBRQ]))?/
   );
   if (move) {
-    let piece = move[1];
-    let fromFile = move[2];
-    let fromRank = move[3];
-    let capture = move[4];
-    let toFile = move[5];
-    let toRank = move[6];
-    let promotedPiece = move[7];
+    var piece = move[1];
+    var fromFile = move[2];
+    var fromRank = move[3];
+    var capture = move[4];
+    var toFile = move[5];
+    var toRank = move[6];
+    var promotedPiece = move[7];
     return legalMoves.filter(
       /** @param {!Chess.Move} move */ function(move) {
         if (
@@ -131,23 +131,23 @@ Chess.Parser.parseOneMove = function(chessPosition, text) {
  * @throws {Error}
  */
 Chess.Parser.parseMoves = function(text) {
-  let chessPosition = new Chess.Position();
+  var chessPosition = new Chess.Position();
 
   Chess.Parser.clean(text)
     .split(' ')
     .every(
       /** @param {string} moveText */ function(moveText) {
-        let moveNumber = moveText.match(/\d+\./);
+        var moveNumber = moveText.match(/\d+\./);
         if (moveNumber) {
           return true;
         }
 
-        let gameOver = moveText.match(/1-0|0-1|\u00BD-\u00BD/);
+        var gameOver = moveText.match(/1-0|0-1|\u00BD-\u00BD/);
         if (gameOver) {
           return false;
         }
 
-        let moves = Chess.Parser.parseOneMove(chessPosition, moveText);
+        var moves = Chess.Parser.parseOneMove(chessPosition, moveText);
         if (!moves || moves.length !== 1) {
           throw new Error("Parse error in '" + moveText + "'");
         }

@@ -55,25 +55,25 @@ test('Bitboard', function() {
       .popcnt(),
     64
   );
-  for (let k = 0; k < 8; ++k) {
+  for (var k = 0; k < 8; ++k) {
     strictEqual(Chess.Bitboard.makeFile(k).popcnt(), 8);
     strictEqual(Chess.Bitboard.makeRank(k).popcnt(), 8);
   }
-  for (let l = -7; l < 8; ++l) {
+  for (var l = -7; l < 8; ++l) {
     strictEqual(Chess.Bitboard.makeDiagonal(l).popcnt(), 8 - Math.abs(l));
     strictEqual(Chess.Bitboard.makeAntidiagonal(l).popcnt(), 8 - Math.abs(l));
   }
-  let is = [0, 1, 7, 8, 31, 32, 55, 56, 62, 63];
-  let js = [0, 15, 31, 32, 40, 63];
-  for (let ii = 0; ii < is.length; ++ii) {
-    let i = is[ii];
-    let bbi = Chess.Bitboard.makeIndex(i);
+  var is = [0, 1, 7, 8, 31, 32, 55, 56, 62, 63];
+  var js = [0, 15, 31, 32, 40, 63];
+  for (var ii = 0; ii < is.length; ++ii) {
+    var i = is[ii];
+    var bbi = Chess.Bitboard.makeIndex(i);
     strictEqual(bbi.popcnt(), 1);
     strictEqual(bbi.isEmpty(), false);
-    for (let ji = 0; ji < js.length; ++ji) {
-      let j = js[ji];
-      let or = Chess.Bitboard.makeIndex(i).or(Chess.Bitboard.makeIndex(j));
-      let hi = Chess.Bitboard.makeIndex(i > j ? i : j);
+    for (var ji = 0; ji < js.length; ++ji) {
+      var j = js[ji];
+      var or = Chess.Bitboard.makeIndex(i).or(Chess.Bitboard.makeIndex(j));
+      var hi = Chess.Bitboard.makeIndex(i > j ? i : j);
       deepEqual(or.popLowestBit(), i === j ? Chess.Bitboard.ZERO : hi);
       or = Chess.Bitboard.makeIndex(i).or(Chess.Bitboard.makeIndex(j));
       strictEqual(or.isEmpty(), false);
@@ -85,10 +85,10 @@ test('Bitboard', function() {
       strictEqual(or.isClear(j), false);
       strictEqual(bbi.isSet(j), j === i);
       strictEqual(bbi.isClear(j), j !== i);
-      let xor = Chess.Bitboard.makeIndex(i).xor(Chess.Bitboard.makeIndex(j));
+      var xor = Chess.Bitboard.makeIndex(i).xor(Chess.Bitboard.makeIndex(j));
       strictEqual(xor.popcnt(), i === j ? 0 : 2);
       strictEqual(xor.isEmpty(), i === j);
-      let bbj = bbi.dup();
+      var bbj = bbi.dup();
       bbj.setBit(j);
       deepEqual(bbj, or);
       strictEqual(bbj.isEqual(or), true);
@@ -103,14 +103,14 @@ test('Bitboard', function() {
 module('zobrist.js');
 
 test('Zobrist', function() {
-  let zobrist = new Chess.Zobrist(0, 0);
-  let dup = zobrist.dup();
+  var zobrist = new Chess.Zobrist(0, 0);
+  var dup = zobrist.dup();
   deepEqual(zobrist, dup);
   zobrist.updateTurn();
   notDeepEqual(zobrist, dup);
   zobrist.updateTurn();
   deepEqual(zobrist, dup);
-  let lightSquares = Chess.Bitboard.LIGHT_SQUARES;
+  var lightSquares = Chess.Bitboard.LIGHT_SQUARES;
   strictEqual(lightSquares.popcnt(), 32);
   zobrist.updatePieceColorBitboard(
     Chess.Piece.QUEEN,
@@ -124,7 +124,7 @@ test('Zobrist', function() {
 module('move.js');
 
 test('Move', function() {
-  let move = new Chess.Move(
+  var move = new Chess.Move(
     32,
     33,
     Chess.Move.Kind.CAPTURE,
@@ -150,7 +150,7 @@ module('position.js');
 // TODO: promotion
 
 test('Position', function() {
-  let position = new Chess.Position();
+  var position = new Chess.Position();
   strictEqual(position.getPieceBitboard(Chess.Piece.PAWN).popcnt(), 16);
 });
 
@@ -160,15 +160,15 @@ test('Perft', function() {
 });
 
 function checkPositionHash(chessPosition) {
-  let old = chessPosition.hashKey.dup();
+  var old = chessPosition.hashKey.dup();
   chessPosition.updateHashKey();
   return chessPosition.hashKey.isEqual(old);
 }
 
 test('Hashing', function() {
-  let position = new Chess.Position();
+  var position = new Chess.Position();
   ok(checkPositionHash(position));
-  let dup = position.hashKey.dup();
+  var dup = position.hashKey.dup();
   position.makeMove(position.getMoves(true)[0]);
   ok(checkPositionHash(position));
   notDeepEqual(position.hashKey, dup);
@@ -190,7 +190,7 @@ test('Parser', function() {
     'A4 G5'
   );
 
-  let chessPosition = Chess.Parser.parseMoves(
+  var chessPosition = Chess.Parser.parseMoves(
     '1. e4 c5 2. Nf3 d6 3. Bb5+ Bd7 4. Bxd7+ Qxd7 5. c4 Nc6 6. Nc3 Nf6 7. 0-0 g6 8. d4 cxd4 9. Nxd4 Bg7 10. Nde2 Qe6!? (a novelty suggested by Irina Krush and considered a turning point for the World Team) 11. Nd5 Qxe4 12. Nc7+ Kd7 13. Nxa8 Qxc4 14. Nb6+ axb6 15. Nc3 Ra8 16. a4 Ne4 17. Nxe4 Qxe4 18. Qb3 f5 19. Bg5 Qb4 20. Qf7 Be5 21. h3 Rxa4 22. Rxa4 Qxa4 23. Qxh7 Bxb2 24. Qxg6 Qe4 25. Qf7 Bd4 26. Qb3 f4 27. Qf7 Be5 28. h4 b5 29. h5 Qc4 30. Qf5+ Qe6 31. Qxe6+ Kxe6 (see diagram) 32. g3 fxg3 33. fxg3 b4 (the World Team did not trust 33...Bxg3 34.h6 Be5 35.h7 Bg7 36.Rf8 b4 37.h8=Q Bxh8 38.Rxh8) 34. Bf4 Bd4+ 35. Kh1! b3 36. g4 Kd5 37. g5 e6 38. h6 Ne7 39. Rd1 e5 40. Be3 Kc4 41. Bxd4 exd4 42. Kg2 b2 43. Kf3 Kc3 44. h7 Ng6 45. Ke4 Kc2 46. Rh1 d3 (46...b1=Q? 47.Rxb1 Kxb1 48.Kxd4 and White will win) 47. Kf5 b1=Q 48. Rxb1 Kxb1 49. Kxg6 d2 50. h8=Q d1=Q 51. Qh7 b5?! 52. Kf6+ Kb2 53. Qh2+ Ka1 54. Qf4 b4? 55. Qxb4 Qf3+ 56. Kg7 d5 57. Qd4+ Kb1 58. g6 Qe4 59. Qg1+ Kb2 60. Qf2+ Kc1 61. Kf6 d4 62. g7 1–0'
   );
   strictEqual(
@@ -228,7 +228,7 @@ test('Parser', function() {
       .isSet(Chess.getIndex(6, 6))
   );
 
-  let chessPosition2 = Chess.Parser.parseMoves(
+  var chessPosition2 = Chess.Parser.parseMoves(
     '1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 c6 5. Nf3 Bg4 6. Bf4 e6 7. h3 Bxf3 8. Qxf3 Bb4 9. Be2 Nd7 10. a3 0-0-0'
   );
   strictEqual(
@@ -245,6 +245,6 @@ test('Parser', function() {
 module('ai.js');
 
 test('AI', function() {
-  let ai = new Chess.AI();
+  var ai = new Chess.AI();
   notStrictEqual(ai.search(new Chess.Position()), null);
 });

@@ -142,8 +142,8 @@ Chess.getAlgebraic = function(rank, file) {
  * @return {number} index 0-63
  */
 Chess.getIndexFromAlgebraic = function(algebraic) {
-  let file = Chess.FILE_CHARACTERS.indexOf(algebraic[0]);
-  let rank = Chess.RANK_CHARACTERS.indexOf(algebraic[1]);
+  var file = Chess.FILE_CHARACTERS.indexOf(algebraic[0]);
+  var rank = Chess.RANK_CHARACTERS.indexOf(algebraic[1]);
   return Chess.getIndex(rank, file);
 };
 

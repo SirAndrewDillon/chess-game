@@ -4,7 +4,7 @@
 // TODO: receive the div id as an argument
 // TODO: implement getters for the most common selectors (which are now constants)
 // TODO: show captured pieces next to the board
-// TODO: tablet drag&drop
+// TODO: tabvar drag&drop
 // TODO: click-click moving (=no drag&drop)
 
 /**
@@ -57,8 +57,8 @@ Chess.UI.CHESSBOARD_PIECES_AND_SQUARES =
  * Creates a new chessboard table under an element with id="chessboard"
  */
 Chess.UI.makeBoard = function() {
-  let table = $('<table>');
-  let filesRow =
+  var table = $('<table>');
+  var filesRow =
     '<tr><th></th>' +
     'abcdefgh'
       .split('')
@@ -71,17 +71,17 @@ Chess.UI.makeBoard = function() {
     '<th></th></tr>';
   table.append(filesRow);
 
-  for (let row = 0; row < Chess.RANKS; ++row) {
-    let rank = Chess.LAST_RANK - row;
-    let tr = $('<tr>');
+  for (var row = 0; row < Chess.RANKS; ++row) {
+    var rank = Chess.LAST_RANK - row;
+    var tr = $('<tr>');
     table.append(tr);
 
-    let rankCell = '<th class="rank">' + (Chess.RANKS - row) + '</th>';
+    var rankCell = '<th class="rank">' + (Chess.RANKS - row) + '</th>';
     tr.append(rankCell);
 
-    for (let file = 0; file < Chess.FILES; ++file) {
-      let td = $('<td>');
-      let color = Chess.isLight(rank, file) ? 'light' : 'dark';
+    for (var file = 0; file < Chess.FILES; ++file) {
+      var td = $('<td>');
+      var color = Chess.isLight(rank, file) ? 'light' : 'dark';
       td.attr('id', Chess.getAlgebraic(rank, file));
       td.attr(
         'title',
@@ -132,20 +132,20 @@ Chess.UI.prototype.updatePieces = function() {
     'white black turn last-move ' + Chess.PIECE_NAMES.join(' ')
   );
 
-  let whites = this.chessPosition.getColorBitboard(Chess.PieceColor.WHITE);
-  let blacks = this.chessPosition.getColorBitboard(Chess.PieceColor.BLACK);
+  var whites = this.chessPosition.getColorBitboard(Chess.PieceColor.WHITE);
+  var blacks = this.chessPosition.getColorBitboard(Chess.PieceColor.BLACK);
 
-  for (let index = 0; index < Chess.RANKS * Chess.FILES; ++index) {
-    let td = $('#' + Chess.getAlgebraicFromIndex(index));
+  for (var index = 0; index < Chess.RANKS * Chess.FILES; ++index) {
+    var td = $('#' + Chess.getAlgebraicFromIndex(index));
 
-    for (let piece = Chess.Piece.PAWN; piece <= Chess.Piece.KING; ++piece) {
+    for (var piece = Chess.Piece.PAWN; piece <= Chess.Piece.KING; ++piece) {
       if (this.chessPosition.getPieceBitboard(piece).isSet(index)) {
-        let isTurn =
+        var isTurn =
           this.chessPosition.getTurnColor() === Chess.PieceColor.WHITE
             ? whites.isSet(index)
             : blacks.isSet(index);
 
-        let div = $('<div>');
+        var div = $('<div>');
         div.attr(
           'title',
           td.attr('title') +
@@ -163,7 +163,7 @@ Chess.UI.prototype.updatePieces = function() {
           )
         );
 
-        let elements = div.add(td);
+        var elements = div.add(td);
         elements.addClass(Chess.PIECE_NAMES[piece]);
         elements.toggleClass('white', whites.isSet(index));
         elements.toggleClass('black', blacks.isSet(index));
@@ -176,7 +176,7 @@ Chess.UI.prototype.updatePieces = function() {
     }
   }
 
-  let lastMove = this.chessPosition.getLastMove();
+  var lastMove = this.chessPosition.getLastMove();
   if (lastMove !== null) {
     $('#' + Chess.getAlgebraicFromIndex(lastMove.getFrom())).addClass(
       'last-move'
@@ -192,7 +192,7 @@ Chess.UI.prototype.updatePieces = function() {
  * Adds chessboard cell hover, and chess piece dragging and dropping capabilities to the chessboard
  */
 Chess.UI.prototype.updateMoves = function() {
-  let moves = this.chessPosition.getMoves();
+  var moves = this.chessPosition.getMoves();
 
   $('#moves').html(
     '<a href="#" id="undo" class="' +
@@ -220,15 +220,15 @@ Chess.UI.prototype.updateMoves = function() {
   $(Chess.UI.CHESSBOARD_PIECES_AND_SQUARES).removeClass('can-move');
   moves.forEach(
     /** @param {!Chess.Move} move */ function(move) {
-      let td = $('#' + Chess.getAlgebraicFromIndex(move.getFrom()));
-      let elements = td.add(td.children());
+      var td = $('#' + Chess.getAlgebraicFromIndex(move.getFrom()));
+      var elements = td.add(td.children());
       elements.addClass('can-move');
     }
   );
 
   /** @type {boolean} */
-  let dragging = false;
-  let ui = this;
+  var dragging = false;
+  var ui = this;
 
   $(Chess.UI.CHESSBOARD_PIECE + '.can-move')
     .mouseenter(
@@ -237,10 +237,10 @@ Chess.UI.prototype.updateMoves = function() {
           return;
         }
 
-        let div = $(this);
-        let td = div.parent();
-        let from = Chess.getIndexFromAlgebraic('' + td.attr('id'));
-        let fromElements = td.add(div);
+        var div = $(this);
+        var td = div.parent();
+        var from = Chess.getIndexFromAlgebraic('' + td.attr('id'));
+        var fromElements = td.add(div);
         fromElements.toggleClass(
           'from',
           moves.some(
@@ -254,7 +254,7 @@ Chess.UI.prototype.updateMoves = function() {
           moves.forEach(
             /** @param {!Chess.Move} move */ function(move) {
               if (move.getFrom() === from) {
-                let toElements = $(
+                var toElements = $(
                   '#' + Chess.getAlgebraicFromIndex(move.getTo())
                 );
                 toElements = toElements.add(toElements.children());
@@ -296,8 +296,8 @@ Chess.UI.prototype.updateMoves = function() {
           // Quote "drop", "start", "stop", etc to prevent the closure compiler from removing them
           $(Chess.UI.CHESSBOARD_SQUARE + '.to').droppable({
             drop: /** @this {!Element} */ function() {
-              let to = Chess.getIndexFromAlgebraic('' + $(this).attr('id'));
-              let makeMoves = moves.filter(
+              var to = Chess.getIndexFromAlgebraic('' + $(this).attr('id'));
+              var makeMoves = moves.filter(
                 /** @param {!Chess.Move} move */ function(move) {
                   return move.getFrom() === from && move.getTo() === to;
                 }
@@ -336,7 +336,7 @@ Chess.UI.prototype.updateMoves = function() {
     });
 
   $('#moves a').click(function() {
-    let id = $(this).attr('id');
+    var id = $(this).attr('id');
     if (id === 'undo') {
       ui.chessPosition.unmakeMove(); // computer (black) move
       ui.chessPosition.unmakeMove(); // user (white) move
@@ -355,21 +355,21 @@ Chess.UI.prototype.updateMoves = function() {
  */
 Chess.UI.prototype.doComputerMove = function() {
   $('#moves').html('');
-  let ui = this;
-  let dim = $('#dim');
+  var ui = this;
+  var dim = $('#dim');
   dim.fadeIn(function() {
-    let move = ui.ai.search(ui.chessPosition);
+    var move = ui.ai.search(ui.chessPosition);
     if (!move) {
       // Mates should have been checked in updateChessPosition
       throw new Error('Move not found');
     }
 
     ui.chessPosition.makeMove(move);
-    let from = $('#' + Chess.getAlgebraicFromIndex(move.getFrom()));
-    let to = $('#' + Chess.getAlgebraicFromIndex(move.getTo()));
-    let dx = to.offset().left - from.offset().left;
-    let dy = to.offset().top - from.offset().top;
-    let piece = from.children('div');
+    var from = $('#' + Chess.getAlgebraicFromIndex(move.getFrom()));
+    var to = $('#' + Chess.getAlgebraicFromIndex(move.getTo()));
+    var dx = to.offset().left - from.offset().left;
+    var dy = to.offset().top - from.offset().top;
+    var piece = from.children('div');
     piece.css({ position: 'relative', top: '0px', left: '0px' });
 
     dim.fadeOut(function() {
@@ -388,7 +388,7 @@ Chess.UI.prototype.updateChessPosition = function() {
   Chess.UI.clearDragging();
   this.updatePieces();
 
-  let status = this.chessPosition.getStatus();
+  var status = this.chessPosition.getStatus();
   if (
     status === Chess.Position.Status.NORMAL &&
     this.chessPosition.getTurnColor() === Chess.PieceColor.BLACK
@@ -413,6 +413,6 @@ Chess.UI.prototype.updateChessPosition = function() {
  */
 function makeChessGame() {
   Chess.UI.makeBoard();
-  let ui = new Chess.UI();
+  var ui = new Chess.UI();
   ui.updateChessPosition();
 }

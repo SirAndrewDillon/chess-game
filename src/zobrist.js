@@ -43,8 +43,8 @@ Chess.Zobrist.Position = {
  * @return {!Array.<number>}
  */
 Chess.Zobrist.createRandomValues = function(count) {
-  let a = [];
-  for (let i = 0; i < count; ++i) {
+  var a = [];
+  for (var i = 0; i < count; ++i) {
     a.push((1 + Math.random() * 0xffffffff) >>> 0);
   }
   return a;
@@ -124,7 +124,7 @@ Chess.Zobrist.prototype.updatePieceColorBitboard = function(
   color,
   bitboard
 ) {
-  let bb = bitboard.dup();
+  var bb = bitboard.dup();
   while (!bb.isEmpty()) {
     this.updatePieceColorSquare(piece, color, bb.extractLowestBitPosition());
   }
