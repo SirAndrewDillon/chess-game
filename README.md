@@ -20,4 +20,4 @@ You can play here: [ReactJS Chess](https://chess-game.now.sh/).
 
 ## Goals for Next Release
 
-v2.0 will have the following: (1) improved chess engine and (2) option to battle friends via the Internet.
+v2.0 will have the following: (1) improved chess engine and (2) option to play friends via the Internet.
