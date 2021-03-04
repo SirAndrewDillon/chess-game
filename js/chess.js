@@ -1062,7 +1062,7 @@ class Board extends React.Component {
             <div className="side_box">
               <div className="content">
                 <p className="header_font">ReactJS Chess</p>
-                <p className="medium_font">
+                <p className="medium-font">
                   Play against our friendly bot!&nbsp;&nbsp;
                   <a href="./how_to_play.html" target="_blank">
                     How to Play
@@ -1076,9 +1076,9 @@ class Board extends React.Component {
                 <p className="header_2_font">Match Information</p>
               </div>
 
-              <div className="wrapper">
+              <div  className="wrapper">
                 <div className="player_box">
-                  <p className="medium_font">White (You)</p>
+                  <p className="medium_font back-color">White (You) </p>
                   {this.state.pieces_collected_by_white}
                 </div>
                 <div className="player_box black_player_color">

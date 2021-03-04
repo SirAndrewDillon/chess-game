@@ -100,12 +100,12 @@ a:visited {
 
 /* mouse over link */
 a:hover {
-  color: #00a25f;
+  color: #b90aee;
 }
 
 /* selected link */
 a:active {
-  color: #00a25f;
+  color: #b90aee;
 }
 
 .right_screen {
@@ -123,24 +123,36 @@ a:active {
   overflow: auto;
 }
 
+.medium-font  {
+  color: white;
+}
+
+.medium-font a {
+  color: white;
+}
+
 .header_font {
   font-size: 2.5em;
   line-height: 1;
+  color: white;
 }
 
 .header_2_font {
   font-size: 2em;
   line-height: 1;
+  color: white;
 }
 
 .medium_font {
   font-size: 1.2em;
   line-height: 1;
+
 }
 
 .small_font {
   font-size: 1.2em;
   line-height: 1;
+  color: white;
 }
 
 .wrapper {
@@ -173,7 +185,7 @@ a:active {
 
 .highlight_box {
   width: 45%;
-  background-color: #00ba6d;
+  background-color: #b90aee;
   padding: 0 20px 5px;
   padding-right: 50px;
   padding-bottom: 8px;
@@ -185,7 +197,7 @@ a:active {
 .side_box {
   width: 65%;
   box-sizing: border-box;
-  background-color: #77e1d7;
+  background-color: #888c8d;
   color: #242424;
   border-radius: 3px;
   box-shadow: 1px 1px 3px #232621;
@@ -247,7 +259,7 @@ a:active {
   cursor: pointer;
   outline: none;
   color: white;
-  background-color: #00ba6d;
+  background-color: #b90aee;
   border: none;
   border-radius: 5px;
   font-size: 0.8em;
@@ -350,7 +362,7 @@ a:active {
   background-color: #deeaee;
 }
 .black_square {
-  background-color: #034f84;
+  background-color: #b90aee;
 }
 
 .top_left_square {
