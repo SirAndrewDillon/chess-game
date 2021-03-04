@@ -1,5 +1,7 @@
 # ReactJS Chess
 
+## Andy Dillon
+
 This is a web chess game coded in React. Feel free to contribute as this is an open source project!
 
 ## How to Play
@@ -12,14 +14,10 @@ You play as the white player, and black is controlled by a simple chess AI (impl
 
 ## Demo
 
-You can play here: [ReactJS Chess](https://arpansahoo.github.io/reactjs-chess/).
+You can play here: [ReactJS Chess](https://chess-game.now.sh/).
 
 ![](/preview.png)
 
 ## Goals for Next Release
 
 v2.0 will have the following: (1) improved chess engine and (2) option to battle friends via the Internet.
-
-## Acknowledgements
-
-UI inspired by [codethejason/checkers](https://github.com/codethejason/checkers).
